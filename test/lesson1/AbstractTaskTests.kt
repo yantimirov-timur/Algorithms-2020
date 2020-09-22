@@ -119,6 +119,39 @@ abstract class AbstractTaskTests : AbstractFileTests() {
             File("temp.txt").delete()
         }
 
+        /**
+         * Тесты, добавленные самостоятельно
+         */
+        try {
+            sortTemperatures("input/temp_in2.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                    -90.0
+                    -80.0
+                    -70.0
+                    -60.0
+                    -50.0
+                    -40.0
+                    -30.0
+                    -20.0
+                    -10.0
+                    0.0
+                    10.0
+                    20.0
+                    30.0
+                    40.0
+                    50.0
+                    60.0
+                    70.0
+                    80.0
+                    90.0
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+
         fun testGeneratedTemperatures(size: Int): PerfResult<Unit> {
             try {
                 val res = generateTemperatures(size)
@@ -273,6 +306,61 @@ abstract class AbstractTaskTests : AbstractFileTests() {
                         32
                         32
                     """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+
+        /**
+         * Тест, добавленнный самостоятельно
+         */
+        try {
+            sortSequence("input/seq_in6.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                    2
+                    3
+                    4
+                    5
+                    2
+                    3
+                    4
+                    5
+                    2
+                    4
+                    5
+                    3
+                    4
+                    5
+                    2
+                    4
+                    2
+                    3
+                    4
+                    1
+                    1
+                    1
+                    1
+                    1
+                    1
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+        try {
+            sortSequence("input/seq_in7.txt", "temp.txt")
+
+            assertFileContent(
+                "temp.txt",
+                """
+                    2
+                    3
+                    4
+                    1
+                
+            """.trimIndent()
             )
         } finally {
             File("temp.txt").delete()

@@ -2,6 +2,8 @@
 
 package lesson1
 
+import java.io.File
+
 /**
  * Сортировка времён
  *
@@ -96,8 +98,27 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 99.5
  * 121.3
  */
+
+
 fun sortTemperatures(inputName: String, outputName: String) {
-    TODO()
+    val lines = File(inputName).readLines()
+    val temperatures = mutableListOf<Double>()
+
+    File(outputName).bufferedWriter().use {
+        for (line in lines) {//O(n)
+            temperatures.add(line.toDouble())
+        }
+
+        temperatures.sort()//O(n log(N))
+
+        for (i in temperatures) {//O(n)
+            it.write(i.toString())
+            it.newLine()
+        }
+    }
+
+    //сложность O(n long(N))
+    //ресурсоемкость O(n)
 }
 
 /**
@@ -130,7 +151,47 @@ fun sortTemperatures(inputName: String, outputName: String) {
  * 2
  */
 fun sortSequence(inputName: String, outputName: String) {
-    TODO()
+    val lines = File(inputName).readLines()
+    val listNumbers = arrayListOf<Int>()
+    val countNumbers = mutableMapOf<Int, Int>()
+
+    for (i in lines) {//O(n)
+        listNumbers.add(i.toInt())//O(1)
+    }
+
+    for (number in listNumbers) {
+        if (number in countNumbers) {
+            countNumbers[number] = countNumbers[number]!! + 1
+        } else {
+            countNumbers[number] = 1
+        }
+    }
+
+    val maxCount = countNumbers.values.maxOrNull()
+    val listOfMaxCount = mutableListOf<Int>()
+
+    for (i in countNumbers) {
+        if (i.value == maxCount) {
+            listOfMaxCount.add(i.key)
+        }
+    }
+
+    val minimum = listOfMaxCount.minOrNull()
+
+    for (i in 0 until listNumbers.size) {//O(n)
+        if (listNumbers[i] == minimum) {
+            listNumbers.add(minimum)
+            listNumbers.remove(listNumbers[i])
+        }
+    }
+
+    File(outputName).bufferedWriter().use {
+        for (i in listNumbers) {
+            it.write(i.toString())
+            it.newLine()
+        }
+    }
+    //сложность O(n)
 }
 
 /**
