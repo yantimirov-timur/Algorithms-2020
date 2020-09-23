@@ -167,7 +167,13 @@ fun sortSequence(inputName: String, outputName: String) {
         }
     }
 
-    val maxCount = countNumbers.values.maxOrNull()
+// В связи с багом на котоеде (не находит метод minOrNull() в Котлине вручную прописал поиск максимума
+    var maxCount = 0
+    for (number in countNumbers.values) {
+        if (number > maxCount) {
+            maxCount = number;
+        }
+    }
     val listOfMaxCount = mutableListOf<Int>()
 
     for (i in countNumbers) {
