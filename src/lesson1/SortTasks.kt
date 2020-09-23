@@ -168,12 +168,8 @@ fun sortSequence(inputName: String, outputName: String) {
     }
 
 // В связи с багом на котоеде (не находит метод minOrNull() в Котлине вручную прописал поиск максимума
-    var maxCount = 0
-    for (number in countNumbers.values) {
-        if (number > maxCount) {
-            maxCount = number;
-        }
-    }
+    val maxCount = countNumbers.values.max()
+
     val listOfMaxCount = mutableListOf<Int>()
 
     for (i in countNumbers) {
@@ -182,12 +178,7 @@ fun sortSequence(inputName: String, outputName: String) {
         }
     }
 
-    var minimum = Int.MAX_VALUE;
-    for (number in listOfMaxCount) {
-        if (number < minimum) {
-            minimum = number
-        }
-    }
+    val minimum = listOfMaxCount.min()
 
     for (i in 0 until listNumbers.size) {//O(n)
         if (listNumbers[i] == minimum) {
