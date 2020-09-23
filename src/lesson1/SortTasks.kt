@@ -182,7 +182,12 @@ fun sortSequence(inputName: String, outputName: String) {
         }
     }
 
-    val minimum = listOfMaxCount.minOrNull()
+    var minimum = Int.MAX_VALUE;
+    for (number in listOfMaxCount) {
+        if (number < minimum) {
+            minimum = number
+        }
+    }
 
     for (i in 0 until listNumbers.size) {//O(n)
         if (listNumbers[i] == minimum) {
