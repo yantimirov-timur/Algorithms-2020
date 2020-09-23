@@ -152,47 +152,101 @@ fun sortTemperatures(inputName: String, outputName: String) {
  */
 fun sortSequence(inputName: String, outputName: String) {
     val lines = File(inputName).readLines()
+    val listInt = arrayListOf<Int>()
+
+    for (i in lines) {
+        listInt.add(i.toInt())
+    }
+
+    val max = listInt.maxOrNull()!!
+
+    var arrayNumCount = Array(max + 1) { i -> 0 }
+
+    for (i in listInt) {
+        arrayNumCount[i]++
+    }
+    var max1 = arrayNumCount.maxOrNull()
+
+    val max2 = arrayNumCount.indexOf(max1)
+
+    for (i in 0 until listInt.size) {
+        if (listInt[i] == max2) {
+            listInt.add(max2)
+            listInt.remove(listInt[i])
+        }
+    }
+
+    File(outputName).bufferedWriter().use {
+        for (i in listInt) {
+            it.write(i.toString())
+            it.newLine()
+
+        }
+    }
+
+    /** val lines = File(inputName).readLines()
     val listNumbers = arrayListOf<Int>()
     val countNumbers = mutableMapOf<Int, Int>()
 
     for (i in lines) {//O(n)
-        listNumbers.add(i.toInt())//O(1)
+    listNumbers.add(i.toInt())//O(1)
     }
+
+    val numCounts = listNumbers.max()?.let { Array(it) { 0 } }
+
+    for (num in listNumbers) {
+    numCounts?.get(num)?.plus(1)
+    }
+
+    val sortedArray = Array(listNumbers.size, { 0 })
+
+    var countSortedIndex = 0;
+
+
+    if (numCounts != null) {
+    for (n in 0..numCounts.size) {
+
+    }
+    }
+
+
+
+
+
 
     for (number in listNumbers) {
-        if (number in countNumbers) {
-            countNumbers[number] = countNumbers[number]!! + 1
-        } else {
-            countNumbers[number] = 1
-        }
+    if (number in countNumbers) {
+    countNumbers[number] = countNumbers[number]!! + 1
+    } else {
+    countNumbers[number] = 1
+    }
     }
 
-// В связи с багом на котоеде (не находит метод minOrNull() в Котлине вручную прописал поиск максимума
     val maxCount = countNumbers.values.max()
 
     val listOfMaxCount = mutableListOf<Int>()
 
     for (i in countNumbers) {
-        if (i.value == maxCount) {
-            listOfMaxCount.add(i.key)
-        }
+    if (i.value == maxCount) {
+    listOfMaxCount.add(i.key)
+    }
     }
 
     val minimum = listOfMaxCount.min()
 
     for (i in 0 until listNumbers.size) {//O(n)
-        if (listNumbers[i] == minimum) {
-            listNumbers.add(minimum)
-            listNumbers.remove(listNumbers[i])
-        }
+    if (listNumbers[i] == minimum) {
+    listNumbers.add(minimum)
+    listNumbers.remove(listNumbers[i])
+    }
     }
 
     File(outputName).bufferedWriter().use {
-        for (i in listNumbers) {
-            it.write(i.toString())
-            it.newLine()
-        }
+    for (i in listNumbers) {
+    it.write(i.toString())
+    it.newLine()
     }
+    }*/
     //сложность O(n)
 }
 
