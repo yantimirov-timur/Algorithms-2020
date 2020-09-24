@@ -103,33 +103,32 @@ public class JavaAlgorithms {
      */
 
     static public String longestCommonSubstring(String first, String second) {
-        StringBuilder stringBuilder = new StringBuilder("");
+        int firstStringLength = first.length();
+        int secondStringLength = second.length();
 
-        int n = first.length();
-        int m = second.length();
-        var maxValue = 0;
+        int maxSubstringLength = 0;
+        int beginIndex = 0;
 
-        var maxI = 0;
-        var array = new int[n][m];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                int x = 0;
-                while (first.charAt(i + x) == second.charAt(j + x)) {
-                    x++;
-                    if (((i + x) >= first.length()) || ((j + x) >= second.length())) {
+        for (int i = 0; i < firstStringLength; i++) {
+            for (int j = 0; j < secondStringLength; j++) {
+                int step = 0;
+                while (first.charAt(i + step) == second.charAt(j + step)) {
+                    step++;
+                    if (((i + step) >= first.length()) || ((j + step) >= second.length())) {
                         break;
                     }
-                    if (x > maxValue) {
-                        maxValue = x;
-                        maxI = i;
+                    if (step > maxSubstringLength) {
+                        maxSubstringLength = step;
+                        beginIndex = i;
                     }
                 }
 
             }
         }
 
-        return first.substring(maxI, (maxI + maxValue));
+        return first.substring(beginIndex, (beginIndex + maxSubstringLength));
+        //сложность O(n*m)
+        //ресурсоемкость O(n)
     }
 
     /**
