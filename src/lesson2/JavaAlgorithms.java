@@ -102,9 +102,34 @@ public class JavaAlgorithms {
      * вернуть ту из них, которая встречается раньше в строке first.
      */
 
-
     static public String longestCommonSubstring(String first, String second) {
-        throw new NotImplementedError();
+        StringBuilder stringBuilder = new StringBuilder("");
+
+        int n = first.length();
+        int m = second.length();
+        var maxValue = 0;
+
+        var maxI = 0;
+        var array = new int[n][m];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int x = 0;
+                while (first.charAt(i + x) == second.charAt(j + x)) {
+                    x++;
+                    if (((i + x) >= first.length()) || ((j + x) >= second.length())) {
+                        break;
+                    }
+                    if (x > maxValue) {
+                        maxValue = x;
+                        maxI = i;
+                    }
+                }
+
+            }
+        }
+
+        return first.substring(maxI, (maxI + maxValue));
     }
 
     /**
