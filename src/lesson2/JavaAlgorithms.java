@@ -122,13 +122,12 @@ public class JavaAlgorithms {
                         beginIndex = i;
                     }
                 }
-
             }
         }
 
         return first.substring(beginIndex, (beginIndex + maxSubstringLength));
-        //сложность O(n*m)
-        //ресурсоемкость O(n)
+        //сложность O(n^3)
+        //ресурсоемкость O(n^2)
     }
 
     /**
