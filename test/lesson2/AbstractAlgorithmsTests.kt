@@ -74,8 +74,15 @@ abstract class AbstractAlgorithmsTests {
     }
 
     fun longestCommonSubstring(longestCommonSubstring: (String, String) -> String) {
-       assertEquals("зд", longestCommonSubstring("здравствуй мир", "мы здесь"))
-       assertEquals("СЕРВАТОР", longestCommonSubstring("ОБСЕРВАТОРИЯ", "КОНСЕРВАТОРЫ"))
+        assertEquals("", longestCommonSubstring("мой мир", "я"))
+        assertEquals("зд", longestCommonSubstring("здравствуй мир", "мы здесь"))
+
+        /**
+         * Тест добавленный самостоятельно
+         */
+        assertEquals("франц", longestCommonSubstring("французские круассаны", "франция"))
+
+        assertEquals("СЕРВАТОР", longestCommonSubstring("ОБСЕРВАТОРИЯ", "КОНСЕРВАТОРЫ"))
         assertEquals(
             "огда ", longestCommonSubstring(
                 """
@@ -128,6 +135,13 @@ abstract class AbstractAlgorithmsTests {
         assertEquals(2, calcPrimesNumber(4))
         assertEquals(4, calcPrimesNumber(10))
         assertEquals(8, calcPrimesNumber(20))
+
+        /**
+         * Тест добавленный самостоятельно
+         */
+        assertEquals(7, calcPrimesNumber(18))
+
+
         assertEquals(1000, calcPrimesNumber(7920))
         assertEquals(1229, calcPrimesNumber(10000))
         assertEquals(2262, calcPrimesNumber(20000))

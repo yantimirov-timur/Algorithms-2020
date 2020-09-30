@@ -3,6 +3,7 @@
 package lesson1
 
 import java.io.File
+import kotlin.math.abs
 
 /**
  * Сортировка времён
@@ -99,26 +100,35 @@ fun sortAddresses(inputName: String, outputName: String) {
  * 121.3
  */
 
-
 fun sortTemperatures(inputName: String, outputName: String) {
+    val minTemperature = -2730
+    val maxTemperature = 5000
     val lines = File(inputName).readLines()
-    val temperatures = mutableListOf<Double>()
+    val numberList = mutableListOf<Int>()
+
+    for (number in lines) {
+        numberList.add((number.toDouble() * 10.0).toInt() - minTemperature)
+    }
+
+    val sortedList = countingSort(numberList.toIntArray(), maxTemperature - minTemperature)
 
     File(outputName).bufferedWriter().use {
-        for (line in lines) {//O(n)
-            temperatures.add(line.toDouble())
-        }
+        for (element in sortedList) {
+            val actual = element + minTemperature
 
-        temperatures.sort()//O(n log(N))
+            val integerPartDivision = abs((element + minTemperature) / 10).toString()
+            val fractionalPartDivision = abs((element + minTemperature) % 10).toString()
 
-        for (i in temperatures) {//O(n)
-            it.write(i.toString())
+            when (actual.compareTo(0)) {
+                -1 -> it.write("-$integerPartDivision.$fractionalPartDivision")
+                1 -> it.write("$integerPartDivision.$fractionalPartDivision")
+                0 -> it.write("0.0")
+            }
             it.newLine()
         }
     }
-
-    //сложность O(n long(N))
-    //ресурсоемкость O(n)
+    //сложность O(n + k)
+    //ресурсоемкость O(n + k)
 }
 
 /**
@@ -171,10 +181,11 @@ fun sortSequence(inputName: String, outputName: String) {
         }
     }
 
+    //заполнение списка повторяющихся одинаковое количество раз значений, чтобы далее выбрать минимальный
     val listOfMaxCount = mutableListOf<Int>()
-    for (i in countNumbers) {
-        if (i.value == maxCount) {
-            listOfMaxCount.add(i.key)
+    for (number in countNumbers) {
+        if (number.value == maxCount) {
+            listOfMaxCount.add(number.key)
         }
     }
 
@@ -185,20 +196,28 @@ fun sortSequence(inputName: String, outputName: String) {
         }
     }
 
+    val resultList = mutableListOf<Int>()
+
+    for (i in 0 until listNumbers.size) {//O(n)
+        if (listNumbers[i] != minimum) {
+            resultList.add(listNumbers[i])
+        }
+    }
+
     for (i in 0 until listNumbers.size) {//O(n)
         if (listNumbers[i] == minimum) {
-            listNumbers.add(minimum)
-            listNumbers.remove(listNumbers[i])
+            resultList.add(listNumbers[i])
         }
     }
 
     File(outputName).bufferedWriter().use {
-        for (i in listNumbers) {
+        for (i in resultList) {
             it.write(i.toString())
             it.newLine()
         }
     }
     //сложность O(n)
+    //ресурсоемкость O(n)
 }
 
 /**

@@ -105,29 +105,31 @@ public class JavaAlgorithms {
     static public String longestCommonSubstring(String first, String second) {
         int firstStringLength = first.length();
         int secondStringLength = second.length();
+        int maxIndex = 0;
+        int maxValue = 0;
 
-        int maxSubstringLength = 0;
-        int beginIndex = 0;
-
+        int[][] matrixWords = new int[firstStringLength][secondStringLength];
         for (int i = 0; i < firstStringLength; i++) {
             for (int j = 0; j < secondStringLength; j++) {
-                int step = 0;
-                while (first.charAt(i + step) == second.charAt(j + step)) {
-                    step++;
-                    if (((i + step) >= first.length()) || ((j + step) >= second.length())) {
-                        break;
+                if (first.charAt(i) == second.charAt(j)) {
+
+                    if ((i == 0 || j == 0)) {
+                        matrixWords[i][j] = 1;
+                    } else {
+                        matrixWords[i][j] = matrixWords[i - 1][j - 1] + 1;
                     }
-                    if (step > maxSubstringLength) {
-                        maxSubstringLength = step;
-                        beginIndex = i;
+
+                    if (matrixWords[i][j] > maxValue) {
+                        maxValue = matrixWords[i][j];
+                        maxIndex = i;
                     }
                 }
             }
         }
 
-        return first.substring(beginIndex, (beginIndex + maxSubstringLength));
-        //сложность O(n^3)
-        //ресурсоемкость O(n^2)
+        return first.substring(maxIndex - maxValue + 1, maxIndex + 1);
+        //сложность O(n^2)
+        //ресурсоемкость O(n)
     }
 
     /**
@@ -147,11 +149,11 @@ public class JavaAlgorithms {
             return 1;
         }
 
-        //Алгоритм Решето Эратосфена
+        int countPrimes = 0;
 
+        //Алгоритм Решето Эратосфена
         boolean[] isPrime = new boolean[limit];
         Arrays.fill(isPrime, true);
-        ArrayList<Integer> primes = new ArrayList<>();
 
         for (int i = 2; i * i < limit; i++) {
             if (isPrime[i]) {
@@ -163,11 +165,11 @@ public class JavaAlgorithms {
 
         for (int i = 2; i < limit; i++) {
             if (isPrime[i]) {
-                primes.add(i);
+                countPrimes++;
             }
         }
 
-        return primes.size();
+        return countPrimes;
     }
     //сложность O(n log log n)
     //ресуроемкость O(n)
