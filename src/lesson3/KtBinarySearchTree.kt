@@ -100,38 +100,6 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
             }
         }
 
-        /**
-         * Устранение инвариантности в дереве
-         */
-        fun eliminationInvariant(successor: Node<T>) {
-            var deleteNode = current!!.left
-
-
-            if (deleteNode?.value == successor.value) {
-                remove(deleteNode!!.value)
-                size++
-            } else {
-                while (deleteNode?.value != successor.value) {
-                    deleteNode = deleteNode?.right
-
-                    if (deleteNode?.value == successor.value) {
-                        remove(deleteNode!!.value)
-                        size++
-                    }
-                }
-            }
-
-            /** if (successor.value == current!!.left?.value)
-            successor.left = null
-            else
-            successor.left = current!!.left
-
-            if (successor.value == current!!.right?.value)
-            successor.right = null
-            else
-            successor.right = current!!.right*/
-        }
-
         //удаление листа
         if (current.left == null && current.right == null) {
             if (isLeft) {
@@ -160,8 +128,10 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
 
         //удаление элемента имеющего два поддерева
         else if (current.left != null && current.right != null) {
+            //нахождение преемника
             val successor: Node<T> = findSuccessor(current)
 
+            //случай, когда у преемника нет потомка
             if (successor.left == null) {
                 successor.left = current.left
                 successor.right = current.right
@@ -179,26 +149,25 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
 
                     deleteNodeParent?.right = null
                 }
+            }
+            //случай, когда у преемника есть потомок, которому нужно переприсвоить родителя
+            else {
+                var parentSuccessor = current.left
+                var currentSuccessor = current.left
 
-            } else {
-                var parentS = current.left
-                var c = current.left
-
-                if (c?.value == successor.value) {
-
+                if (currentSuccessor?.value == successor.value) {
                     successor.right = current.right
                 } else {
-                    while (c?.value != successor.value) {
-                        parentS = c
-                        c = c?.right
+                    while (currentSuccessor?.value != successor.value) {
+                        parentSuccessor = currentSuccessor
+                        currentSuccessor = currentSuccessor?.right
 
                     }
-                    parentS!!.right = successor.left
+                    parentSuccessor!!.right = successor.left
 
                     successor.left = current.left
                     successor.right = current.right
                 }
-
             }
 
             if (isLeft) {
@@ -216,44 +185,24 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
 
         size--
         return true
+        //время: O(высота дерева)
+        //средний случай: O(logN), худший случай: O(N)
+
+        //По моему мнению, тесты к этой задаче достаточно полны
+        //Если я не прав, поправьте
     }
-
-
-    /**  private fun next(element: T): Node<T>? {
-    var current = root
-    var successor: Node<T>? = null
-
-    while (current != null) {
-    if (current.value > element) {
-    successor = current
-    current = current.left
-    }
-    else
-    current = current.right
-    }
-    return successor
-    }*/
-
 
     /**
      * Поиск преемника
      */
     private fun findSuccessor(deleteNode: Node<T>): Node<T> {
-        //var parentSuccessor = deleteNode
         var successor = deleteNode
         var current = successor.left
 
         while (current != null) {
-            // parentSuccessor = successor
             successor = current
             current = current.right
         }
-
-        /**if (successor != deleteNode.right) {
-        parentSuccessor.left = successor.right
-        successor.right = deleteNode.right
-
-        }*/
 
         return successor
     }
