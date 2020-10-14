@@ -141,7 +141,6 @@ abstract class AbstractAlgorithmsTests {
          */
         assertEquals(7, calcPrimesNumber(18))
 
-
         assertEquals(1000, calcPrimesNumber(7920))
         assertEquals(1229, calcPrimesNumber(10000))
         assertEquals(2262, calcPrimesNumber(20000))

@@ -80,8 +80,184 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
      * Средняя
      */
     override fun remove(element: T): Boolean {
-        TODO()
+        var current = root
+        var parent = current
+        var isLeft = false
+
+        //Поиск элемента
+        while (current!!.value != element) {
+            parent = current
+
+            if (element < current.value) {
+                current = current.left
+                isLeft = true
+            } else {
+                isLeft = false
+                current = current.right
+            }
+            if (current == null) {
+                return false
+            }
+        }
+
+        /**
+         * Устранение инвариантности в дереве
+         */
+        fun eliminationInvariant(successor: Node<T>) {
+            var deleteNode = current!!.left
+
+
+            if (deleteNode?.value == successor.value) {
+                remove(deleteNode!!.value)
+                size++
+            } else {
+                while (deleteNode?.value != successor.value) {
+                    deleteNode = deleteNode?.right
+
+                    if (deleteNode?.value == successor.value) {
+                        remove(deleteNode!!.value)
+                        size++
+                    }
+                }
+            }
+
+            /** if (successor.value == current!!.left?.value)
+            successor.left = null
+            else
+            successor.left = current!!.left
+
+            if (successor.value == current!!.right?.value)
+            successor.right = null
+            else
+            successor.right = current!!.right*/
+        }
+
+        //удаление листа
+        if (current.left == null && current.right == null) {
+            if (isLeft) {
+                parent?.left = null
+            } else
+                parent?.right = null
+        }
+        //удаление левого поддерава
+        else if (current.right == null) {
+            if (current == root)
+                root = current.left
+            if (isLeft)
+                parent?.left = current.left;
+            else
+                parent?.right = current.left
+        }
+        //удаление правого поддерева
+        else if (current.left == null) {
+            if (current == root)
+                root = current.right
+            if (isLeft)
+                parent?.left = current.right
+            else
+                parent?.right = current.right
+        }
+
+        //удаление элемента имеющего два поддерева
+        else if (current.left != null && current.right != null) {
+            val successor: Node<T> = findSuccessor(current)
+
+            if (successor.left == null) {
+                successor.left = current.left
+                successor.right = current.right
+
+                if (successor.left?.value == successor.value) {
+                    successor.left = null
+                } else {
+                    var deleteNode = successor.left
+                    var deleteNodeParent = successor.left
+
+                    while (deleteNode?.value != successor.value) {
+                        deleteNodeParent = deleteNode
+                        deleteNode = deleteNode?.right
+                    }
+
+                    deleteNodeParent?.right = null
+                }
+
+            } else {
+                var parentS = current.left
+                var c = current.left
+
+                if (c?.value == successor.value) {
+
+                    successor.right = current.right
+                } else {
+                    while (c?.value != successor.value) {
+                        parentS = c
+                        c = c?.right
+
+                    }
+                    parentS!!.right = successor.left
+
+                    successor.left = current.left
+                    successor.right = current.right
+                }
+
+            }
+
+            if (isLeft) {
+                if (current == root)
+                    root = successor
+                else
+                    parent?.left = successor
+            } else {
+                if (current == root)
+                    root = successor
+                else
+                    parent?.right = successor
+            }
+        }
+
+        size--
+        return true
     }
+
+
+    /**  private fun next(element: T): Node<T>? {
+    var current = root
+    var successor: Node<T>? = null
+
+    while (current != null) {
+    if (current.value > element) {
+    successor = current
+    current = current.left
+    }
+    else
+    current = current.right
+    }
+    return successor
+    }*/
+
+
+    /**
+     * Поиск преемника
+     */
+    private fun findSuccessor(deleteNode: Node<T>): Node<T> {
+        //var parentSuccessor = deleteNode
+        var successor = deleteNode
+        var current = successor.left
+
+        while (current != null) {
+            // parentSuccessor = successor
+            successor = current
+            current = current.right
+        }
+
+        /**if (successor != deleteNode.right) {
+        parentSuccessor.left = successor.right
+        successor.right = deleteNode.right
+
+        }*/
+
+        return successor
+    }
+
 
     override fun comparator(): Comparator<in T>? =
         null
@@ -103,6 +279,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          */
         override fun hasNext(): Boolean {
             // TODO
+
             throw NotImplementedError()
         }
 

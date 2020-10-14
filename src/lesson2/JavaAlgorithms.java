@@ -112,7 +112,6 @@ public class JavaAlgorithms {
         for (int i = 0; i < firstStringLength; i++) {
             for (int j = 0; j < secondStringLength; j++) {
                 if (first.charAt(i) == second.charAt(j)) {
-
                     if ((i == 0 || j == 0)) {
                         matrixWords[i][j] = 1;
                     } else {
