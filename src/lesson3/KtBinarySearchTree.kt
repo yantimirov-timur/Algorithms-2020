@@ -84,7 +84,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         var parent = current
         var isLeft = false
 
-        //Поиск элемента
+        //Поиск элемента и его родителя и положения
         while (current!!.value != element) {
             parent = current
 
@@ -99,7 +99,6 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
                 return false
             }
         }
-
         //удаление листа
         if (current.left == null && current.right == null) {
             if (isLeft) {
@@ -125,7 +124,6 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
             else
                 parent?.right = current.right
         }
-
         //удаление элемента имеющего два поддерева
         else if (current.left != null && current.right != null) {
             //нахождение преемника
@@ -215,6 +213,18 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         BinarySearchTreeIterator()
 
     inner class BinarySearchTreeIterator internal constructor() : MutableIterator<T> {
+        private var stack = Stack<Node<T>>()
+
+        private fun pushNode(node: Node<T>?) {
+            if (node != null) {
+                stack.push(node)
+            }
+        }
+
+        init {
+            pushNode(root)
+        }
+
 
         /**
          * Проверка наличия следующего элемента
@@ -227,9 +237,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          * Средняя
          */
         override fun hasNext(): Boolean {
-            // TODO
-
-            throw NotImplementedError()
+            return stack.isNotEmpty()
         }
 
         /**
@@ -246,8 +254,13 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          * Средняя
          */
         override fun next(): T {
-            // TODO
-            throw NotImplementedError()
+            if (stack.isEmpty())
+                throw IllegalStateException()
+
+            val next = stack.pop()
+            pushNode(next.right)
+
+            return next.value
         }
 
         /**
