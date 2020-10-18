@@ -69,7 +69,13 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      * Сложная
      */
     override fun iterator(): MutableIterator<String> {
-        TODO()
+        var res = mutableListOf<String>().iterator()
+
+
+        val node = root
+        var a = node.children
+
+        return res
     }
 
 }

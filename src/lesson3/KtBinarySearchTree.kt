@@ -214,17 +214,13 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
 
     inner class BinarySearchTreeIterator internal constructor() : MutableIterator<T> {
         private var stack = Stack<Node<T>>()
-
-        private fun pushNode(node: Node<T>?) {
-            if (node != null) {
-                stack.push(node)
-            }
-        }
+        private var elementForDelete: Node<T>? = null
 
         init {
-            pushNode(root)
+            if (root != null) {
+                stack.push(root)
+            }
         }
-
 
         /**
          * Проверка наличия следующего элемента
@@ -236,9 +232,8 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Средняя
          */
-        override fun hasNext(): Boolean {
-            return stack.isNotEmpty()
-        }
+        //если в нашем стеке еще есть элементы, значит мы можем вызвать hasNext()
+        override fun hasNext(): Boolean = stack.isNotEmpty()  //время O(1)
 
         /**
          * Получение следующего элемента
@@ -257,10 +252,14 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
             if (stack.isEmpty())
                 throw IllegalStateException()
 
-            val next = stack.pop()
-            pushNode(next.right)
+            val next = stack.pop()//получение элемента и его удаление из стека
+            elementForDelete = next
+            if (next.right != null) {
+                stack.push(next.right)
+            }
 
             return next.value
+            //время O(logN)
         }
 
         /**
@@ -276,10 +275,15 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          * Сложная
          */
         override fun remove() {
-            // TODO
-            throw NotImplementedError()
+            if (elementForDelete == null) {
+                throw IllegalStateException()
+            } else {
+                //рекурсивное удаление
+                remove(elementForDelete?.value)
+                elementForDelete = null
+            }
+            //время O(n)
         }
-
     }
 
     /**
