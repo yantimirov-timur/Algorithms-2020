@@ -1,5 +1,8 @@
 package lesson4
 
+import lesson3.KtBinarySearchTree
+import java.util.ArrayDeque
+
 /**
  * Префиксное дерево для строк
  */
@@ -68,14 +71,49 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      *
      * Сложная
      */
-    override fun iterator(): MutableIterator<String> {
-        var res = mutableListOf<String>().iterator()
 
 
-        val node = root
-        var a = node.children
+    override fun iterator(): MutableIterator<String> = TrieIterator()
 
-        return res
+
+    inner class TrieIterator : MutableIterator<String> {
+        private var arrayDeque = ArrayDeque<String>()
+
+        private var elementForDelete = ""
+
+        init {
+            addWords(root, "")
+        }
+
+        private fun addWords(parent: Node, partWord: String) {
+            if (parent.children.isNotEmpty()) {
+                parent.children.forEach { (t, u) ->
+                    if (t == 0.toChar())
+                        arrayDeque.addFirst(partWord)
+                    else
+                        addWords(u, partWord + t)
+                }
+            }
+        }
+
+        override fun hasNext(): Boolean = arrayDeque.isNotEmpty()
+
+        override fun next(): String {
+            if (arrayDeque.isEmpty())
+                throw IllegalStateException()
+
+            val next = arrayDeque.pollFirst()
+            elementForDelete = next
+
+            return next
+        }
+
+        override fun remove() {
+            //рекурсивное удаление
+            remove(elementForDelete)
+            elementForDelete = null.toString()
+        }
     }
+
 
 }

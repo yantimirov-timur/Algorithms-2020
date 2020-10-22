@@ -122,6 +122,9 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("Initial set: $controlSet")
             val binarySet = create()
+
+            controlSet.remove(150)
+
             for (element in controlSet) {
                 binarySet += element
             }
@@ -130,6 +133,16 @@ abstract class AbstractBinarySearchTreeTest {
             val expectedSize = binarySet.size - 1
             val maxHeight = binarySet.height()
             println("Removing element $toRemove from the tree...")
+
+            /**
+            Тест добавленный самостоятельно
+             */
+            assertFalse(
+                binarySet.remove(150),
+                "That tree does not can have element more than 100"
+            )
+
+
             assertTrue(
                 binarySet.remove(toRemove),
                 "An element was supposedly not removed from the tree when it should have been."

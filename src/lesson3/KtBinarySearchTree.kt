@@ -213,12 +213,12 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
         BinarySearchTreeIterator()
 
     inner class BinarySearchTreeIterator internal constructor() : MutableIterator<T> {
-        private var stack = Stack<Node<T>>()
+        private var arrayDeque = ArrayDeque<Node<T>>()
         private var elementForDelete: Node<T>? = null
 
         init {
             if (root != null) {
-                stack.push(root)
+                arrayDeque.addFirst(root!!)
             }
         }
 
@@ -232,8 +232,7 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          *
          * Средняя
          */
-        //если в нашем стеке еще есть элементы, значит мы можем вызвать hasNext()
-        override fun hasNext(): Boolean = stack.isNotEmpty()  //время O(1)
+        override fun hasNext(): Boolean = arrayDeque.isNotEmpty()  //время O(1)
 
         /**
          * Получение следующего элемента
@@ -249,13 +248,13 @@ class KtBinarySearchTree<T : Comparable<T>> : AbstractMutableSet<T>(), Checkable
          * Средняя
          */
         override fun next(): T {
-            if (stack.isEmpty())
+            if (arrayDeque.isEmpty())
                 throw IllegalStateException()
 
-            val next = stack.pop()//получение элемента и его удаление из стека
+            val next = arrayDeque.pollFirst()//получение элемента и его удаление
             elementForDelete = next
             if (next.right != null) {
-                stack.push(next.right)
+                arrayDeque.addFirst(next.right!!)
             }
 
             return next.value
