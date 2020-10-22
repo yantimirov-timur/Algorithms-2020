@@ -1,6 +1,5 @@
 package lesson4
 
-import lesson3.KtBinarySearchTree
 import java.util.ArrayDeque
 
 /**
@@ -71,34 +70,31 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
      *
      * Сложная
      */
-
-
     override fun iterator(): MutableIterator<String> = TrieIterator()
-
 
     inner class TrieIterator : MutableIterator<String> {
         private var arrayDeque = ArrayDeque<String>()
         private var elementForDelete: String? = null
 
         init {
-            addWords(root, "")
+            makeWords(root, "")
         }
 
         /**
          * Рекурсивное заполнение очереди слов
          */
-        private fun addWords(parent: Node, partWord: String) {
+        private fun makeWords(parent: Node, partWord: String) {
             if (parent.children.isNotEmpty()) {
                 parent.children.forEach { (char, node) ->
-                    if (char == 0.toChar())
+                    if (char == 0.toChar())//когда полностью составили слово, добавляем его в очередь
                         arrayDeque.addFirst(partWord)
                     else
-                        addWords(node, partWord + char)
+                        makeWords(node, partWord + char)
                 }
             }
         }
 
-        override fun hasNext(): Boolean = arrayDeque.isNotEmpty()
+        override fun hasNext(): Boolean = arrayDeque.isNotEmpty() //время O(1)
 
         override fun next(): String {
             if (arrayDeque.isEmpty())
@@ -108,6 +104,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             elementForDelete = next
 
             return next
+            //время O(logN)
         }
 
         override fun remove() {
@@ -117,6 +114,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
                 remove(elementForDelete)
                 elementForDelete = null
             }
+            //время O(n)
         }
     }
 }

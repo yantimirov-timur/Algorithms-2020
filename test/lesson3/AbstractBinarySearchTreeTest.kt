@@ -216,6 +216,15 @@ abstract class AbstractBinarySearchTreeTest {
             assertFailsWith<IllegalStateException>("Something was supposedly returned after the elements ended") {
                 binaryIter.next()
             }
+
+            /**
+             * Тест добавленный самостоятельно
+             */
+            binarySet.clear()
+            assertFailsWith<IllegalStateException>("Cleaned set must not have a next element") {
+                binaryIter.next()
+            }
+
             println("All clear!")
         }
     }

@@ -107,6 +107,12 @@ abstract class AbstractTrieTest {
             assertFailsWith<IllegalStateException>("Something was supposedly returned after the elements ended") {
                 trieIter.next()
             }
+
+            trieSet.clear()
+            assertFailsWith<IllegalStateException>("Cleaned set must not have a next element") {
+                trieIter.next()
+            }
+
             println("All clear!")
         }
     }
