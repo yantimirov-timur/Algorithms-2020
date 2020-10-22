@@ -78,20 +78,22 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
 
     inner class TrieIterator : MutableIterator<String> {
         private var arrayDeque = ArrayDeque<String>()
-
-        private var elementForDelete = ""
+        private var elementForDelete: String? = null
 
         init {
             addWords(root, "")
         }
 
+        /**
+         * Рекурсивное заполнение очереди слов
+         */
         private fun addWords(parent: Node, partWord: String) {
             if (parent.children.isNotEmpty()) {
-                parent.children.forEach { (t, u) ->
-                    if (t == 0.toChar())
+                parent.children.forEach { (char, node) ->
+                    if (char == 0.toChar())
                         arrayDeque.addFirst(partWord)
                     else
-                        addWords(u, partWord + t)
+                        addWords(node, partWord + char)
                 }
             }
         }
@@ -109,11 +111,12 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
         }
 
         override fun remove() {
-            //рекурсивное удаление
-            remove(elementForDelete)
-            elementForDelete = null.toString()
+            if (elementForDelete == null) {
+                throw IllegalStateException()
+            } else {
+                remove(elementForDelete)
+                elementForDelete = null
+            }
         }
     }
-
-
 }
