@@ -108,6 +108,9 @@ abstract class AbstractTrieTest {
                 trieIter.next()
             }
 
+            /**
+             * Тест добавленный самостоятельно
+             */
             trieSet.clear()
             assertFailsWith<IllegalStateException>("Cleaned set must not have a next element") {
                 trieIter.next()
