@@ -15,7 +15,40 @@ package lesson7
  * При сравнении подстрок, регистр символов *имеет* значение.
  */
 fun longestCommonSubSequence(first: String, second: String): String {
-    TODO()
+    val firstStringLength = first.length
+    val secondStringLength = second.length
+    val table = Array(firstStringLength + 1) { Array(secondStringLength + 1) { 0 } }
+
+    //заполнение таблицы длинами
+    for (i in 1..firstStringLength) {
+        for (j in 1..secondStringLength) {
+            if (first[i - 1] == second[j - 1]) {
+                table[i][j] = table[i - 1][j - 1] + 1
+            } else {
+                table[i][j] = maxOf(table[i - 1][j], table[i][j - 1])
+            }
+        }
+    }
+
+    var result = ""
+
+    //составление слова
+    var i = firstStringLength
+    var j = secondStringLength
+
+    while (i > 0 && j > 0) {
+        when {
+            first[i - 1] == second[j - 1] -> {
+                result += (first[i - 1])
+                i -= 1
+                j -= 1
+            }
+            table[i - 1][j] == table[i][j] -> i -= 1
+            else -> j -= 1
+        }
+    }
+
+    return result.reversed()
 }
 
 /**
