@@ -49,6 +49,8 @@ fun longestCommonSubSequence(first: String, second: String): String {
     }
 
     return result.reversed()
+    //время O(n^2)
+    //память O(n)
 }
 
 /**
@@ -64,7 +66,52 @@ fun longestCommonSubSequence(first: String, second: String): String {
  * В примере ответами являются 2, 8, 9, 12 или 2, 5, 9, 12 -- выбираем первую из них.
  */
 fun longestIncreasingSubSequence(list: List<Int>): List<Int> {
-    TODO()
+    val n = list.size
+
+    val subSequenceLength = Array(n) { 0 }
+    val maxLengths = Array(n) { 0 }
+
+    for (i in 0 until n) {
+        subSequenceLength[i] = 1
+        maxLengths[i] = -1
+        for (j in 0 until i) {
+            if (list[j] < list[i]) {
+                if (1 + subSequenceLength[j] > subSequenceLength[i]) {
+                    subSequenceLength[i] = 1 + subSequenceLength[j]
+                    maxLengths[i] = j
+                }
+            }
+        }
+    }
+
+    var answer = subSequenceLength[0]
+    var index = 0
+
+    for (i in 0 until n) {
+        if (subSequenceLength[i] > answer) {
+            answer = subSequenceLength[i]
+            index = i
+        }
+    }
+
+    val resultIndexes = mutableListOf<Int>()
+
+    while (index != -1) {
+        resultIndexes.add(index)
+        index = maxLengths[index]
+    }
+
+    resultIndexes.reverse()
+
+    val result = mutableListOf<Int>()
+    for (i in resultIndexes) {
+        result.add(list[i])
+    }
+
+    return result
+    //время O(n^2)
+    //память O(n)
+
 }
 
 /**

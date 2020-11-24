@@ -76,7 +76,10 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      * Средняя
      */
     override fun remove(element: T): Boolean {
-        TODO("not implemented")
+        if (contains(element))
+            return false
+
+        return true
     }
 
     /**

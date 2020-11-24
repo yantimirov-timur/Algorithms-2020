@@ -29,7 +29,13 @@ package lesson6
  * связного графа ровно по одному разу
  */
 fun Graph.findEulerLoop(): List<Graph.Edge> {
-    TODO()
+    val a = edges
+
+    for (edge in edges){
+        
+    }
+
+   return emptyList()
 }
 
 /**
