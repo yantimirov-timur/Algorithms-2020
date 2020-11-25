@@ -75,9 +75,26 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      *
      * Средняя
      */
+
+    private enum class Element {
+        Deleted
+    }
+
+
     override fun remove(element: T): Boolean {
-        if (contains(element))
+        if (!contains(element))
             return false
+
+        var index = element.startingIndex()
+        var current = storage[index]
+
+        while (current != element) {
+            index = (index + 1) % capacity
+            current = storage[index]
+        }
+
+        storage[index] = Element.Deleted
+        size--
 
         return true
     }
@@ -92,7 +109,45 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      *
      * Средняя (сложная, если поддержан и remove тоже)
      */
-    override fun iterator(): MutableIterator<T> {
-        TODO("not implemented")
+    override fun iterator(): MutableIterator<T> = OpenAddressingIterator()
+
+    inner class OpenAddressingIterator : MutableIterator<T> {
+        var index = 0
+        var current: T? = null
+
+        init {
+            while (index < capacity && storage[index] != null) {
+                index += 1
+            }
+        }
+
+        override fun hasNext(): Boolean {
+            return if (storage.all { it == null }) false
+            else index < capacity
+        }
+
+        override fun next(): T {
+            if (!hasNext())
+                throw IllegalStateException()
+
+            current = storage[index] as T?
+            index++
+
+            while (index < capacity && storage[index] == null)
+                index += 1
+
+            return current as T
+        }
+
+        override fun remove() {
+
+            if (current == null)
+                throw IllegalStateException()
+            else {
+                remove(current)
+                current = null
+            }
+        }
+
     }
 }
