@@ -116,6 +116,15 @@ abstract class AbstractOpenAddressingSetTest {
             assertFailsWith<IllegalStateException>("Something was supposedly returned after the elements ended") {
                 openAddressingSetIter.next()
             }
+
+            /**
+             * Тест, добавленный самостоятельно
+             */
+            controlSet.clear()
+            assertFailsWith<IllegalStateException>("Cleared set can not have a next element") {
+                openAddressingSetIter.next()
+            }
+
             println("All clear!")
         }
     }
