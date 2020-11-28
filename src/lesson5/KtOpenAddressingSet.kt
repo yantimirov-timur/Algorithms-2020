@@ -76,27 +76,8 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      * Средняя
      */
 
-    private enum class Element {
-        Deleted
-    }
-
-
     override fun remove(element: T): Boolean {
-        if (!contains(element))
-            return false
-
-        var index = element.startingIndex()
-        var current = storage[index]
-
-        while (current != element) {
-            index = (index + 1) % capacity
-            current = storage[index]
-        }
-
-        storage[index] = Element.Deleted
-        size--
-
-        return true
+        TODO()
     }
 
     /**
@@ -109,44 +90,34 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      *
      * Средняя (сложная, если поддержан и remove тоже)
      */
+
     override fun iterator(): MutableIterator<T> = OpenAddressingIterator()
 
     inner class OpenAddressingIterator : MutableIterator<T> {
-        var index = 0
-        var current: T? = null
+        private var lastElement: Any? = null
+        private var index = 0
+        private var countElements = 0
 
-        init {
-            while (index < capacity && storage[index] != null) {
-                index += 1
-            }
-        }
+        //время O(1)
+        override fun hasNext(): Boolean = countElements < size
 
-        override fun hasNext(): Boolean {
-            return if (storage.all { it == null }) false
-            else index < capacity
-        }
-
+        //время O(n)
         override fun next(): T {
             if (!hasNext())
                 throw IllegalStateException()
 
-            current = storage[index] as T?
+            while (storage[index] == null) {
+                index++
+            }
+            lastElement = storage[index]
             index++
+            countElements++
 
-            while (index < capacity && storage[index] == null)
-                index += 1
-
-            return current as T
+            return lastElement as T
         }
 
         override fun remove() {
-
-            if (current == null)
-                throw IllegalStateException()
-            else {
-                remove(current)
-                current = null
-            }
+            TODO("Not yet implemented")
         }
 
     }

@@ -104,7 +104,7 @@ class KtTrie : AbstractMutableSet<String>(), MutableSet<String> {
             elementForDelete = next
 
             return next
-            //время O(logN)
+            //время O(1)
         }
 
         override fun remove() {

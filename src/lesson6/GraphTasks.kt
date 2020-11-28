@@ -29,13 +29,46 @@ package lesson6
  * связного графа ровно по одному разу
  */
 fun Graph.findEulerLoop(): List<Graph.Edge> {
+    if (edges.size == 0) return emptyList()
+
+    //Эйлеров цикл существует только тогда, когда степени все вершин четны
+    //Также, если есть 2 вершины с нечётной степенью, то в графе есть только эйлеров путь (эйлерова цикла нет),
+    //если же таких вершин больше 2, то в графе нет ни эйлерова цикла, ни эйлерова пути
+
     val a = edges
 
-    for (edge in edges){
-        
+    var listBegin = mutableListOf<Graph.Vertex>()
+    val setEnds = mutableSetOf<Graph.Vertex>()
+
+    val map = mutableMapOf<Graph.Vertex, Set<Graph.Vertex>>()
+    val newMap = mutableMapOf<Graph.Vertex, Graph.Vertex>()
+
+    for (edge in edges) {
+
+        if (edge.begin in newMap) {
+            setEnds.add(edge.end)
+            setEnds.add(newMap.getValue(edge.begin))
+            map.put(edge.begin, setEnds)
+        } else
+            newMap.put(edge.begin, edge.end)
+        // listBegin.add(edge.begin)
+        // listEnds.add(edge.end)
+    }
+    val anSet = mutableSetOf<Graph.Vertex>()
+
+    for ((key, value) in newMap) {
+        if (key !in map) {
+            anSet.add(value)
+            map.put(key, anSet)
+        }
     }
 
-   return emptyList()
+    for ((key, value) in map) {
+
+    }
+
+
+    return emptyList()
 }
 
 /**
