@@ -14,6 +14,8 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
 
     override var size: Int = 0
 
+    private enum class Element { Deleted }
+
     /**
      * Индекс в таблице, начиная с которого следует искать данный элемент
      */
@@ -24,18 +26,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
     /**
      * Проверка, входит ли данный элемент в таблицу
      */
-    override fun contains(element: T): Boolean {
-        var index = element.startingIndex()
-        var current = storage[index]
-        while (current != null) {
-            if (current == element) {
-                return true
-            }
-            index = (index + 1) % capacity
-            current = storage[index]
-        }
-        return false
-    }
+    override fun contains(element: T): Boolean = find(element) != null
 
     /**
      * Добавление элемента в таблицу.
@@ -76,8 +67,31 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
      * Средняя
      */
 
+    /**
+     * Поиск элемента в таблице
+     */
+    private fun find(element: T): Int? {
+        var index = element.startingIndex()
+        val start = index
+        var current = storage[index]
+
+        while (current != element) {
+            index = (index + 1) % capacity
+            if (index == start) return null
+            current = storage[index]
+        }
+        return index
+    }
+
     override fun remove(element: T): Boolean {
-        TODO()
+        if (!contains(element)) return false
+        val elementIndex = find(element)
+
+        checkNotNull(elementIndex)
+
+        storage[elementIndex] = null
+        size--
+        return true
     }
 
     /**
@@ -106,7 +120,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             if (!hasNext())
                 throw IllegalStateException()
 
-            while (storage[index] == null) {
+            while (storage[index] == null || storage[index] == Element.Deleted) {
                 index++
             }
             lastElement = storage[index]
@@ -117,7 +131,12 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
         }
 
         override fun remove() {
-            TODO("Not yet implemented")
+            if (lastElement == null) throw IllegalStateException()
+
+            storage[index - 1] = Element.Deleted
+            lastElement = null
+            size--
+            countElements--
         }
 
     }
