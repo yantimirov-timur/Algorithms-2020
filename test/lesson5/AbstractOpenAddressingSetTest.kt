@@ -74,6 +74,13 @@ abstract class AbstractOpenAddressingSetTest {
                     expectedSize, openAddressingSet.size,
                     "The size of the set is not as expected."
                 )
+
+                openAddressingSet.clear()
+                assertEquals(
+                    0, openAddressingSet.size,
+                    "Size of empty set must be zero"
+
+                )
             }
         }
     }
