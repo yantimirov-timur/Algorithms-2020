@@ -131,7 +131,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             return lastElement as T
         }
 
-        //время O(n)
+        //время O(1)
         override fun remove() {
             if (lastElement == null) throw IllegalStateException()
 
