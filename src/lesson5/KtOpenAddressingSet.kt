@@ -92,6 +92,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
         storage[elementIndex] = null
         size--
         return true
+        //время O(n)
     }
 
     /**
@@ -130,6 +131,7 @@ class KtOpenAddressingSet<T : Any>(private val bits: Int) : AbstractMutableSet<T
             return lastElement as T
         }
 
+        //время O(n)
         override fun remove() {
             if (lastElement == null) throw IllegalStateException()
 
